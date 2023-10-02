@@ -49,7 +49,7 @@ export default function TextEditor() {
     }
   };
   return (
-    <div>
+    <>
       <OptimizedReactQuill
         theme="snow"
         value={value}
@@ -63,6 +63,6 @@ export default function TextEditor() {
           <Loading />
         </div>
       )}
-    </div>
+    </>
   );
 }
