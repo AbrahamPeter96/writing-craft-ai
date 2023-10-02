@@ -34,13 +34,12 @@ app.post("/paraphrasing", async (req, res) => {
 });
 
 app.post("/continuewriting", async (req, res) => {
-  let streamText;
   try {
     const { prompt } = req.body;
     console.log(prompt, "working with contine");
     const response = await openai.completions.create({
       model: "gpt-3.5-turbo-instruct",
-      prompt: `${prompt}continue writing  `,
+      prompt: `${prompt}continue writing`,
       max_tokens: 100,
     });
 
