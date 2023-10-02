@@ -3,12 +3,7 @@ import React, { useState, useMemo, useRef, useEffect } from "react";
 import axios from "axios";
 import "react-quill/dist/quill.snow.css";
 import "./custom-quill.css";
-import {
-  modules,
-  formats,
-  stripHtmlTags,
-  extractWordsAfterSlash,
-} from "../utils/helper";
+import { modules, formats, stripHtmlTags } from "../utils/helper";
 import dynamic from "next/dynamic";
 import ReactQuill from "react-quill";
 import { Loading } from "./Loading";
