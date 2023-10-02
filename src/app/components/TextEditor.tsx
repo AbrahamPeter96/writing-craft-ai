@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import axios from "axios";
 import "react-quill/dist/quill.snow.css";
 import "./custom-quill.css";
@@ -23,6 +23,9 @@ if (typeof document !== "undefined") {
 export default function TextEditor() {
   const [value, setValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [showSuggestionTab, setShowSuggestionTab] = useState(false);
+  const typingTimeoutRef = useRef<number | null>(null);
   const OptimizedReactQuill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
@@ -30,9 +33,9 @@ export default function TextEditor() {
 
   const handleKeyDown = async (event: KeyboardEvent) => {
     if (event.key === "Tab") {
+      setShowSuggestionTab(true);
       event.preventDefault();
       const suggest = stripHtmlTags(value);
-      // const promptToSend = extractWordsAfterSlash(suggest);
       console.log(suggest);
       if (suggest !== "" && isLoading === false) {
         setIsLoading(true);
@@ -48,12 +51,45 @@ export default function TextEditor() {
       }
     }
   };
+
+  useEffect(() => {
+    onChangeHandler;
+  }, [showSuggestionTab]);
+  const onChangeHandler = (e: string) => {
+    setValue(e);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    setIsTyping(true);
+    typingTimeoutRef.current = window.setTimeout(() => {
+      setIsTyping(false);
+      if (!showSuggestionTab) {
+        setShowSuggestionTab(true);
+        checkSuggestion();
+      }
+    }, 1000);
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  };
+
+  const checkSuggestion = () => {
+    console.log(":working", showSuggestionTab);
+
+    if (!showSuggestionTab) {
+      setValue(value + "continue with ai");
+    } else {
+      return;
+    }
+  };
   return (
     <>
       <OptimizedReactQuill
         theme="snow"
         value={value}
-        onChange={setValue}
+        onChange={onChangeHandler}
         modules={modules}
         formats={formats}
         onKeyDown={handleKeyDown}
