@@ -33,12 +33,30 @@ app.post("/paraphrasing", async (req, res) => {
   }
 });
 
-app.get("/test", (req, res) => {
+app.post("/continuewriting", async (req, res) => {
+  let streamText;
   try {
-    res.status(200).json({
-      work: "working",
+    const { prompt } = req.body;
+    console.log(prompt, "working with contine");
+    const response = await openai.completions.create({
+      model: "gpt-3.5-turbo-instruct",
+      prompt: `${prompt}continue writing  `,
+      max_tokens: 100,
     });
-  } catch (err) {}
+
+    console.log(response.choices[0].text);
+    return res.status(200).json({
+      success: true,
+      data: response.choices[0].text,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      error: error.response
+        ? error.response.data
+        : "there was an issue on server",
+    });
+  }
 });
 
 const port = process.env.PORT || 3001;

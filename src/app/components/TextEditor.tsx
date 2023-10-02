@@ -32,16 +32,18 @@ export default function TextEditor() {
     if (event.key === "Tab") {
       event.preventDefault();
       const suggest = stripHtmlTags(value);
-      const promptToSend = extractWordsAfterSlash(suggest);
-      console.log(promptToSend);
-      if (promptToSend !== "" && isLoading === false) {
+      // const promptToSend = extractWordsAfterSlash(suggest);
+      console.log(suggest);
+      if (suggest !== "" && isLoading === false) {
         setIsLoading(true);
         const { data } = await axios.post("/aiasist", {
-          suggest: promptToSend,
+          suggest,
         });
         const { aiPrompt } = data;
+        console.log(aiPrompt);
         const updatedValue = suggest.replace(/\/\w+/, `<p>${aiPrompt}</p>`);
-        setValue(updatedValue);
+        setValue(aiPrompt);
+        console.log(updatedValue, "tag 991", value);
         setIsLoading(false);
       }
     }

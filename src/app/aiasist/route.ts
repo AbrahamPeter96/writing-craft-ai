@@ -3,33 +3,22 @@ import axios from "axios";
 
 export async function POST(request: Request) {
   const { suggest } = await request.json();
-  const url: string = "http://localhost:3001/paraphrasing";
+  const options = {
+    method: "POST",
+    url: "http://localhost:3001/continuewriting",
+    data: {
+      prompt: suggest,
+    },
+  };
+
   try {
-    console.log(suggest);
-    const res = await axios.post(url, { prompt: suggest });
-    console.log(res);
-  } catch (err) {}
+    const rapidApiResponse = await axios.request(options);
 
-  // const options = {
-  //   method: "GET",
-  //   url: "https://ai-writer1.p.rapidapi.com/text/",
-  //   params: {
-  //     text: suggest,
-  //   },
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "X-RapidAPI-Key": process.env.RAPID_API_KEY,
-  //     "X-RapidAPI-Host": process.env.RAPID_API_HOST,
-  //   },
-  // };
-
-  // try {
-  //   const rapidApiResponse = await axios.request(options);
-  //   const { response } = rapidApiResponse.data;
-  //   return NextResponse.json({ aiPrompt: response });
-  // } catch (error) {
-  //   console.error(error);
-  // }
+    console.log(rapidApiResponse.data.data);
+    return NextResponse.json({ aiPrompt: rapidApiResponse.data.data });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 // For testing

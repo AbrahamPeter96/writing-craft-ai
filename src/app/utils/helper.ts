@@ -57,6 +57,7 @@ export const modules = {
           button.disabled = true;
           const paraphraseContent = await paraphrase(content);
           editor.innerHTML = paraphraseContent;
+          console.log(editor.innerHTML);
           button.disabled = false;
         }
       },
