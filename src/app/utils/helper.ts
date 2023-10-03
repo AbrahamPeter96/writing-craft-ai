@@ -1,3 +1,5 @@
+/** @format */
+
 import axios from "axios";
 
 export const extractWordsAfterSlash = (text: string) => {
@@ -11,9 +13,10 @@ export const extractWordsAfterSlash = (text: string) => {
 };
 
 export const stripHtmlTags = (html: string) => {
-  const tmp = document.createElement("DIV");
+  const tmp: any =
+    typeof document !== "undefined" ? document.createElement("DIV") : null;
   tmp.innerHTML = html;
-  return tmp.textContent || tmp.innerHTML || "";
+  return tmp?.textContent || tmp?.innerHTML || "";
 };
 
 export const paraphrase = async (usertext: string) => {
@@ -48,10 +51,14 @@ export const modules = {
     ],
     handlers: {
       paraphrasebtn: async () => {
-        const editor = document.querySelector(".ql-editor");
-        const button = document.querySelector(
-          ".ql-paraphrasebtn"
-        ) as HTMLButtonElement;
+        const editor =
+          typeof document !== "undefined"
+            ? document.querySelector(".ql-editor")
+            : null;
+        const button: any =
+          typeof document !== "undefined"
+            ? (document.querySelector(".ql-paraphrasebtn") as HTMLButtonElement)
+            : null;
         if (editor) {
           const content = editor.innerHTML;
           button.disabled = true;
